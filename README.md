@@ -1,0 +1,1 @@
+Creating domain redirect, with Cloudfront and S3 bucket
