@@ -1,1 +1,1 @@
-Creating domain redirect, with Cloudfront and S3 bucket
+Terraform module to create a domain redirect, using Cloudfront and S3 bucket.
