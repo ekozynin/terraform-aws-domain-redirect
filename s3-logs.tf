@@ -1,5 +1,6 @@
 resource "aws_s3_bucket" "logs" {
   bucket        = "${var.from_domain_name}-logs"
+  force_destroy = var.force_destroy
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "logs" {
@@ -18,19 +19,18 @@ resource "aws_s3_bucket_acl" "logs" {
 
 resource "aws_s3_bucket_lifecycle_configuration" "logs" {
   bucket = "${var.from_domain_name}-logs"
-  force_destroy = var.force_destroy
 
   rule {
-    id = "${var.from_domain_name}-archiving"
+    id     = "${var.from_domain_name}-archiving"
     status = "Enabled"
 
     transition {
-      days = var.logs_transition_ia
+      days          = var.logs_transition_ia
       storage_class = "STANDARD_IA"
     }
 
     transition {
-      days = var.logs_transition_glacier
+      days          = var.logs_transition_glacier
       storage_class = "GLACIER"
     }
 

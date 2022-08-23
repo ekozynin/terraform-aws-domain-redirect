@@ -1,6 +1,6 @@
 module "certificate" {
-  source = "ekozynin/ssl-certificate/aws"
-  version = "~> 2.0"
+  source    = "ekozynin/ssl-certificate/aws"
+  version   = "~> 2.0"
   providers = {
     // Cloudfront only supports ACM certs issues in us-east-1
     aws = aws.cloudfront

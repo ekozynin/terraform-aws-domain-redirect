@@ -16,7 +16,7 @@ resource "aws_s3_bucket_logging" "redirect_logging" {
 
 
 resource "aws_s3_bucket_website_configuration" "redirect_website" {
-  bucket        = "${var.from_domain_name}-redirect"
+  bucket = "${var.from_domain_name}-redirect"
   redirect_all_requests_to {
     host_name = var.target_domain_name
   }
