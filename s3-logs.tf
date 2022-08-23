@@ -1,9 +1,8 @@
 resource "aws_s3_bucket" "logs" {
   bucket        = "${var.from_domain_name}-logs"
-  force_destroy = var.force_destroy
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "logs_encryption" {
+resource "aws_s3_bucket_server_side_encryption_configuration" "logs" {
   bucket = "${var.from_domain_name}-logs"
   rule {
     apply_server_side_encryption_by_default {
@@ -12,17 +11,17 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "logs_encryption" 
   }
 }
 
-resource "aws_s3_bucket_acl" "logs_acl" {
+resource "aws_s3_bucket_acl" "logs" {
   bucket = "${var.from_domain_name}-logs"
   acl    = "log-delivery-write"
 }
 
-resource "aws_s3_bucket_lifecycle_configuration" "logs_lifecycle" {
+resource "aws_s3_bucket_lifecycle_configuration" "logs" {
   bucket = "${var.from_domain_name}-logs"
   force_destroy = var.force_destroy
 
   rule {
-    id = "${var.from_domain_name}-log-archiving"
+    id = "${var.from_domain_name}-archiving"
     status = "Enabled"
 
     transition {
