@@ -5,7 +5,7 @@ Example usage:
 ```hcl
 module "domain-redirect" {
   source = "ekozynin/domain-redirect/aws"
-  version = "~> 1.0.2"
+  version = "~> 1.0"
   providers = {
     aws            = aws,
     aws.cloudfront = aws.cloudfront

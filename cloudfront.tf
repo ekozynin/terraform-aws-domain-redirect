@@ -1,20 +1,20 @@
 resource "aws_cloudfront_distribution" "redirect" {
   enabled         = true
   is_ipv6_enabled = true
-  http_version    = "http2"
+  http_version    = "http2and3"
   price_class     = var.price_class
 
   aliases = [var.from_domain_name]
 
   viewer_certificate {
-    acm_certificate_arn      = module.certificate.arn
+    acm_certificate_arn      = module.www_certificate.arn
     minimum_protocol_version = "TLSv1"
     ssl_support_method       = "sni-only"
   }
 
   origin {
     domain_name = aws_s3_bucket_website_configuration.redirect_website.website_endpoint
-    origin_id   = "${var.from_domain_name}-redirect"
+    origin_id   = "s3-bucket-redirect"
 
     custom_origin_config {
       http_port              = "80"
@@ -27,7 +27,7 @@ resource "aws_cloudfront_distribution" "redirect" {
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD", "OPTIONS", "DELETE", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
-    target_origin_id = "${var.from_domain_name}-redirect"
+    target_origin_id = "s3-bucket-redirect"
 
     compress               = true
     viewer_protocol_policy = "redirect-to-https"
@@ -38,6 +38,7 @@ resource "aws_cloudfront_distribution" "redirect" {
 
     forwarded_values {
       query_string = true
+      headers      = ["Origin"]
 
       cookies {
         forward = "none"
@@ -68,4 +69,8 @@ resource "aws_route53_record" "redirect-a_record" {
     zone_id                = aws_cloudfront_distribution.redirect.hosted_zone_id
     evaluate_target_health = false
   }
+}
+
+resource "aws_cloudfront_origin_access_identity" "cloudfront_oai" {
+  comment = "CloudFront OAI for ${aws_s3_bucket.redirect.bucket}"
 }
